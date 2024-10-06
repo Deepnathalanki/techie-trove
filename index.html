@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Techie Trove</title>
+    <style>
+      /* General Styling */
+      body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      select {
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 100%;
+      }
+
+      /* Header Styling */
+      .header {
+        width: 100%;
+        background-color: #dc362e;
+        padding: 15px 0;
+        text-align: center;
+        color: #fff;
+        font-size: 30px;
+        font-weight: bold;
+      }
+
+      /* ParkHub Card Styling */
+      .card {
+        background: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        max-width: 500px;
+        margin: 20px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .card h2 {
+        color: #dc362e;
+        margin-bottom: 10px;
+      }
+
+      .card p {
+        font-family: Arial, sans-serif;
+        font-size: 14px;
+        line-height: 1.6;
+        color: #555;
+      }
+      ul {
+        font-family: Arial, sans-serif;
+        margin: 10px 0; /* Margin for the unordered list */
+        padding-left: 20px; /* Indentation for the list items */
+      }
+
+      /* Orange Bar Styling */
+      .orange-bar {
+        height: 5px;
+        background-color: #dc362e;
+        width: 100%;
+        margin: 20px 0;
+      }
+
+      /* Main Container Styling */
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: #f4f4f4;
+        color: #333;
+        padding: 20px;
+      }
+
+      h1 {
+        text-align: center;
+        color: #dc362e;
+        font-size: 22px;
+      }
+
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background: #fff;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        width: 300px;
+      }
+
+      input[type='file'] {
+        margin: 10px 0;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+        width: 100%;
+      }
+
+      button {
+        background-color: #dc362e;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        width: 100%;
+        font-size: 16px;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      h2 {
+        text-align: center;
+        color: #333;
+      }
+
+      img {
+        display: block;
+        margin: 0 auto;
+        border: 2px solid #4caf50;
+        border-radius: 5px;
+        width: 640px; /* Set a fixed width for consistency */
+        height: auto; /* Maintain aspect ratio */
+      }
+
+      /* Flex container for the card and main content */
+      .flex-container {
+        display: flex;
+        justify-content: center;
+        padding: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Orange Header -->
+    <div class="header">Techie Trove</div>
+    <br />
+    <br /><br />
+    <!-- Flex container for card and main content -->
+    <div class="flex-container">
+      <!-- ParkHub Card -->
+      <div class="card">
+        <h2>What We Do</h2>
+        <p>
+          Techie Trove is dedicated to enhancing accessibility in parking
+          management through innovative technology. Our project utilizes
+          advanced computer vision algorithms to detect the presence of
+          accessible vehicles in video streams by identifying the International
+          Symbol of Access (ISA) on various surfaces, such as license plates and
+          windows. We have developed three distinct datasets: the
+          <strong>Open Dataset Model</strong>, which utilizes publicly available
+          datasets to identify accessible vehicles; the
+          <strong>Custom Dataset Model</strong>, tailored for specific
+          environments to improve detection accuracy; and the
+          <strong>Combined Dataset Model</strong>, which leverages the strengths
+          of both open and custom datasets for comprehensive detection. This
+          multifaceted approach ensures accurate and efficient detection,
+          supporting the creation of inclusive parking solutions for everyone.
+        </p>
+      </div>
+
+      <!-- Main Content Container -->
+      <div class="container">
+        <h1>Upload a Video</h1>
+
+        <form
+          action="{{ url_for('upload_video') }}"
+          method="POST"
+          enctype="multipart/form-data"
+        >
+          <input type="file" name="video" accept="video/*" required />
+          <select name="model_name" required>
+            <option value="" disabled selected>Select Model</option>
+            <option value="best_hybrid.pt">OD & CD</option>
+            <option value="best_v11.pt">OD</option>
+            <option value="best_custom_dataset.pt">CD</option>
+          </select>
+          <button type="submit">Upload and Process</button>
+        </form>
+        <br />
+        {% if video_path %}
+        <h2>Object Detection Results:</h2>
+        <img
+          src="{{ url_for('video_feed', video_path=video_path, model_name=model_name ) }}"
+          width="640"
+          height="480"
+        />
+        {% endif %}
+      </div>
+    </div>
+  </body>
+</html>
